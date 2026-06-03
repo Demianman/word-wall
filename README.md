@@ -2,53 +2,79 @@
 
 A vocabulary learning app that feels like popping bubble wrap — not grinding through flashcards.
 
-**Live demo → [demianman.github.io/word-wall](https://demianman.github.io/word-wall/)**
+**Live → [demianman.github.io/word-wall](https://demianman.github.io/word-wall/)**
 
 ---
 
 ## The idea
 
-Most vocab apps present words one at a time, like a queue you have to process. That works, but it requires willpower to start. The goal here was a lower activation energy: you open the page, the whole wall is already there, and you just start popping words whenever one catches your eye.
+Most vocab apps present words one at a time, like a queue you have to process. The goal here was lower activation energy: open the page, the whole wall is already there, pop words whenever one catches your eye.
 
-The interaction mirrors the satisfying feel of popping bubble wrap — the whole sheet is visible at once, you can work in any order, and each pop gives a small hit of completion. When the wall clears, a fresh one loads.
+The interaction mirrors bubble wrap — the whole sheet is visible at once, you work in any order, and each pop gives a small hit of completion.
 
 ---
 
-## What's in it
+## Word list
 
-**Word cloud layout**
-Words are placed using an Archimedean spiral algorithm that starts at the center and works outward, with collision detection to prevent overlap. Six font-size tiers (13–62px) distributed across ~42 words per wall. Random color from a 10-color palette, slight random rotation per word.
+**~190 words** curated from the **COCA (Corpus of Contemporary American English)** frequency list, focusing on the 2000–5000 band — words that appear constantly in everyday spoken English, articles, and podcasts, but that intermediate learners often haven't fully internalized.
 
-**Per-word popup**
-Click any word to expand a card showing:
-- IPA phonetic transcription (American English)
-- Part of speech
-- Chinese definition
-- Example sentence with the word highlighted
+The list skews toward:
+- Emotional and psychological vocabulary (anxiety, burnout, spiral, validate)
+- Personality and social dynamics (candid, cynical, assertive, condescending)
+- Everyday verbs you reach for mid-sentence (procrastinate, ramble, fluctuate, undermine)
+- Abstract nouns that appear in conversation (nuance, momentum, precedent, facade)
 
-**Audio pronunciation**
-Uses the Web Speech API with voice priority: Samantha → Ava → Alex → any `en-US` local voice. Auto-plays when a card opens; replay button in the card.
+Each entry includes a manually written American English IPA transcription and a contextual example sentence with the target word highlighted.
 
-**Pop mechanic**
-- Click the card again, or press `Space` → word bursts into particles and disappears
-- `Esc` → close card without popping
-- Progress bar fills as you clear the wall
-- When all words are cleared, a new wall randomizes from the pool
+---
 
-**Custom word import**
+## Learning algorithm
+
+Words have three states, tracked in `localStorage`:
+
+| State | Meaning |
+|-------|---------|
+| **new** | Not yet encountered |
+| **review** | Appeared on a wall but left unpopped |
+| **known** | Popped at least once |
+
+**Wall composition** on each load:
+1. Up to 14 **review** words — words you've left behind before (marked with a warm orange glow)
+2. **New** words fill the remaining slots
+3. If the pool runs out, **known** words appear as light reinforcement
+
+**Review words never disappear** — if you skip a word, it comes back next wall with priority. Once you pop it, it's marked known. Known words don't regress to review even if you skip them on a reinforcement appearance.
+
+Progress persists across sessions. The done screen shows cumulative stats: known / review / total.
+
+---
+
+## Interaction
+
+| Action | Result |
+|--------|--------|
+| Click a word | Opens a card: IPA · definition · example sentence |
+| `Space` or click "认识 ✓" | Pops the word — particle burst, marked known |
+| `Esc` or "跳过" | Closes card, word stays on wall |
+| Click "换一墙" | Records unpopped words as review, loads a new wall |
+| All words popped | Done screen with session stats |
+
+**Review words** are shown with a subtle amber glow so you can spot them at a glance.
+
+---
+
+## Custom word import
+
 Top-right "导入词书" button accepts four formats, auto-detected:
 
 | Format | Structure |
 |--------|-----------|
 | `.txt` | One word per line |
 | `.csv` | Header row: `word, meaning, phonetic, pos, example` |
-| `.tsv` | Tab-separated — direct Anki export compatible |
+| `.tsv` | Tab-separated — Anki export compatible |
 | `.json` | `[{ "word": "", "meaning": "", "phonetic": "", "pos": "", "example": "" }]` |
 
-A template CSV is available via the "下载模板 CSV" button in the import dialog. Imported word lists persist in `localStorage` across sessions. Switch back to the built-in list anytime with "恢复默认词书".
-
-**Built-in word list**
-~110 high-frequency everyday English words curated for active vocabulary (words you'd use in conversation and writing, not GRE lists). Each entry includes a manually written IPA transcription and a contextual example sentence.
+A template CSV is available via the "下载模板 CSV" button. Imported lists persist in `localStorage`.
 
 ---
 
@@ -56,36 +82,18 @@ A template CSV is available via the "下载模板 CSV" button in the import dial
 
 Single self-contained HTML file. No dependencies, no build step, no backend. Works offline after first load.
 
-- Layout: absolute positioning + JS spiral placement with AABB collision detection
-- Audio: Web Speech API (`SpeechSynthesisUtterance`)
-- Persistence: `localStorage`
-- Hosting: GitHub Pages
+- **Layout**: absolute positioning + Archimedean spiral placement with AABB collision detection
+- **Sizing**: six font tiers (13–62px) distributed across ~42 words per wall
+- **Audio**: Web Speech API, voice priority: Samantha → Ava Enhanced → any `en-US` local voice
+- **Persistence**: `localStorage` for custom word lists and per-word progress
+- **Hosting**: GitHub Pages
 
 ---
 
 ## Run locally
 
-Just open `index.html` in a browser. No server needed.
-
 ```bash
 open index.html   # macOS
 ```
 
----
-
-## Import format reference
-
-Minimal CSV (meaning only):
-```
-word,meaning
-ephemeral,短暂的；转瞬即逝的
-tenacious,坚韧的；不屈不挠的
-```
-
-Full CSV:
-```
-word,meaning,phonetic,pos,example
-serendipity,意外发现美好事物的能力,/ˌsɛrənˈdɪpɪti/,n,Finding that coffee shop was pure serendipity.
-```
-
-Anki TSV export (Basic note type) works directly — the first field becomes the word, the second becomes the meaning.
+No server needed.
