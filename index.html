@@ -194,6 +194,21 @@ body{
 #next-btn:hover{opacity:.85}
 
 /* ── import button ── */
+/* review word glow */
+.chip.rv{ filter: drop-shadow(0 0 6px rgba(251,146,60,.55)) !important; }
+.chip.rv:hover{ filter: brightness(1.5) drop-shadow(0 0 12px rgba(251,146,60,.8)) !important; }
+
+/* next-wall button */
+#next-wall-btn{
+  font-size:11px;color:#252540;
+  background:none;border:1px solid #1a1a2e;
+  border-radius:6px;padding:5px 10px;
+  cursor:pointer;white-space:nowrap;
+  pointer-events:all;flex-shrink:0;
+  transition:color .15s,border-color .15s;
+}
+#next-wall-btn:hover{color:#555;border-color:#2e2e50}
+
 #import-btn{
   font-size:11px;color:#252540;
   background:none;border:1px solid #1a1a2e;
@@ -282,6 +297,7 @@ body{
   <span class="hud-label">Word Wall</span>
   <div class="hud-bar"><div class="hud-fill" id="hud-fill"></div></div>
   <span class="hud-count"><b id="hc">0</b>/<b id="ht">0</b></span>
+  <button id="next-wall-btn">换一墙</button>
   <button id="import-btn">导入词书</button>
 </div>
 
@@ -462,6 +478,82 @@ const WORDS = [
   {w:"irony",          p:"/ˈaɪrəni/",              pos:"n",     m:"讽刺；反讽",                       ex:"The {irony} is that he wrote a book about time management."},
   {w:"wit",            p:"/wɪt/",                  pos:"n",     m:"机智；妙语",                       ex:"She charmed the entire room with her quick {wit}."},
   {w:"procrastination",p:"/prəˌkræstɪˈneɪʃn/",     pos:"n",     m:"拖延；拖延行为",                   ex:"{Procrastination} is usually about fear, not laziness."},
+  /* ── COCA high-frequency additions ── */
+  {w:"adamant",       p:"/ˈædəmənt/",             pos:"adj",   m:"坚决的；不妥协的",                 ex:"She was {adamant} that she hadn't made a mistake."},
+  {w:"ambivalent",    p:"/æmˈbɪvələnt/",           pos:"adj",   m:"矛盾的；有两种对立情感的",         ex:"I feel {ambivalent} about moving abroad."},
+  {w:"assertive",     p:"/əˈsɜːrtɪv/",             pos:"adj",   m:"自信果断的；敢于表达自己的",       ex:"Being {assertive} doesn't mean being aggressive."},
+  {w:"concise",       p:"/kənˈsaɪs/",              pos:"adj",   m:"简洁的；精炼的",                   ex:"Your summary is clear and {concise}."},
+  {w:"drastic",       p:"/ˈdræstɪk/",              pos:"adj",   m:"极端的；激烈的",                   ex:"{Drastic} measures were needed to fix the situation."},
+  {w:"earnest",       p:"/ˈɜːrnɪst/",              pos:"adj",   m:"认真的；真诚的",                   ex:"She made an {earnest} effort to understand his perspective."},
+  {w:"frantic",       p:"/ˈfræntɪk/",              pos:"adj",   m:"慌乱的；焦急万分的",               ex:"I was {frantic} with worry when she didn't call back."},
+  {w:"inevitable",    p:"/ɪnˈɛvɪtəbl/",            pos:"adj",   m:"不可避免的",                       ex:"Conflict felt {inevitable} given the tension between them."},
+  {w:"meticulous",    p:"/mɪˈtɪkjʊləs/",           pos:"adj",   m:"一丝不苟的；极细心的",             ex:"He was {meticulous} about keeping accurate records."},
+  {w:"reckless",      p:"/ˈrɛkləs/",               pos:"adj",   m:"鲁莽的；不计后果的",               ex:"That was a {reckless} decision."},
+  {w:"shrewd",        p:"/ʃruːd/",                 pos:"adj",   m:"精明的；有判断力的",               ex:"She's a {shrewd} negotiator who never shows her hand."},
+  {w:"trivial",       p:"/ˈtrɪviəl/",              pos:"adj",   m:"微不足道的；琐碎的",               ex:"Don't waste energy on {trivial} things."},
+  {w:"vivid",         p:"/ˈvɪvɪd/",                pos:"adj",   m:"生动的；鲜明的",                   ex:"I have a {vivid} memory of that afternoon."},
+  {w:"wary",          p:"/ˈwɛri/",                 pos:"adj",   m:"谨慎的；保持警惕的",               ex:"Be {wary} of advice that sounds too good to be true."},
+  {w:"worthwhile",    p:"/ˌwɜːrθˈwaɪl/",           pos:"adj",   m:"值得做的；有价值的",               ex:"The effort was definitely {worthwhile}."},
+  {w:"lenient",       p:"/ˈliːniənt/",             pos:"adj",   m:"宽容的；不严格的",                 ex:"The judge was {lenient} with first-time offenders."},
+  {w:"rigid",         p:"/ˈrɪdʒɪd/",               pos:"adj",   m:"僵化的；死板的",                   ex:"The system is too {rigid} to adapt quickly."},
+  {w:"ambiguous",     p:"/æmˈbɪɡjuəs/",            pos:"adj",   m:"模糊的；含义不清的",               ex:"The wording was deliberately {ambiguous}."},
+  {w:"deliberate",    p:"/dɪˈlɪbərɪt/",            pos:"adj",   m:"故意的；深思熟虑的",               ex:"The error was {deliberate}, not accidental."},
+  {w:"discreet",      p:"/dɪˈskriːt/",             pos:"adj",   m:"谨慎的；低调的",                   ex:"Please be {discreet} about what you heard."},
+  {w:"naive",         p:"/naɪˈiːv/",               pos:"adj",   m:"天真的；不世故的",                 ex:"It was {naive} to think it would all go smoothly."},
+  {w:"petty",         p:"/ˈpɛti/",                 pos:"adj",   m:"小气的；心胸狭窄的",               ex:"Don't be {petty} about such a small thing."},
+  {w:"defiant",       p:"/dɪˈfaɪənt/",             pos:"adj",   m:"反抗的；不服从的",                 ex:"She gave a {defiant} response to the criticism."},
+  {w:"tangible",      p:"/ˈtændʒɪbl/",             pos:"adj",   m:"切实的；有形的",                   ex:"I need {tangible} results, not just promises."},
+  {w:"assume",        p:"/əˈsuːm/",                pos:"v",     m:"假定；想当然地认为",               ex:"Don't {assume} you know what she's thinking."},
+  {w:"confront",      p:"/kənˈfrʌnt/",             pos:"v",     m:"直面；正视（问题）",               ex:"You need to {confront} the problem instead of avoiding it."},
+  {w:"dedicate",      p:"/ˈdɛdɪkeɪt/",             pos:"v",     m:"投身于；致力于",                   ex:"She {dedicated} years to mastering the craft."},
+  {w:"dismiss",       p:"/dɪsˈmɪs/",               pos:"v",     m:"否定；不予理会",                   ex:"He {dismissed} her concerns as overreacting."},
+  {w:"exaggerate",    p:"/ɪɡˈzædʒəreɪt/",          pos:"v",     m:"夸大；言过其实",                   ex:"I'm not {exaggerating} — it was that bad."},
+  {w:"fluctuate",     p:"/ˈflʌktʃueɪt/",           pos:"v",     m:"波动；起伏不定",                   ex:"Her mood {fluctuates} a lot under stress."},
+  {w:"imply",         p:"/ɪmˈplaɪ/",               pos:"v",     m:"暗示；意味着",                     ex:"What exactly are you {implying}?"},
+  {w:"inspire",       p:"/ɪnˈspaɪər/",             pos:"v",     m:"激励；鼓舞",                       ex:"Her story {inspired} thousands of people to act."},
+  {w:"interpret",     p:"/ɪnˈtɜːrprɪt/",           pos:"v",     m:"诠释；解读",                       ex:"How do you {interpret} his silence?"},
+  {w:"negotiate",     p:"/nɪˈɡoʊʃieɪt/",           pos:"v",     m:"谈判；协商",                       ex:"You should {negotiate} before accepting the first offer."},
+  {w:"reflect",       p:"/rɪˈflɛkt/",              pos:"v",     m:"反思；体现",                       ex:"Take time to {reflect} before making a big decision."},
+  {w:"reinforce",     p:"/ˌriːɪnˈfɔːrs/",          pos:"v",     m:"强化；巩固",                       ex:"Praise {reinforces} positive behavior."},
+  {w:"rely",          p:"/rɪˈlaɪ/",                pos:"v",     m:"依赖；依靠",                       ex:"You can't {rely} on luck alone."},
+  {w:"reveal",        p:"/rɪˈviːl/",               pos:"v",     m:"揭示；透露",                       ex:"The data {revealed} a surprising pattern."},
+  {w:"sacrifice",     p:"/ˈsækrɪfaɪs/",            pos:"v",     m:"牺牲；放弃",                       ex:"She {sacrificed} sleep to meet the deadline."},
+  {w:"speculate",     p:"/ˈspɛkjʊleɪt/",           pos:"v",     m:"推测；猜测",                       ex:"I can only {speculate} about his motives."},
+  {w:"tolerate",      p:"/ˈtɑːlərеɪt/",            pos:"v",     m:"忍受；容忍",                       ex:"I can't {tolerate} being disrespected."},
+  {w:"undermine",     p:"/ˌʌndərˈmaɪn/",           pos:"v",     m:"削弱；暗中破坏",                   ex:"Constant criticism can {undermine} confidence."},
+  {w:"collaborate",   p:"/kəˈlæbəreɪt/",           pos:"v",     m:"合作；协作",                       ex:"The two teams {collaborated} on the project."},
+  {w:"strive",        p:"/straɪv/",                pos:"v",     m:"努力；奋力争取",                   ex:"She {strives} to improve a little every day."},
+  {w:"ponder",        p:"/ˈpɑːndər/",              pos:"v",     m:"深思；琢磨",                       ex:"I {pondered} the question for a long time."},
+  {w:"resent",        p:"/rɪˈzɛnt/",               pos:"v",     m:"怨恨；不满",                       ex:"I {resent} being blamed for something I didn't do."},
+  {w:"lament",        p:"/ləˈmɛnt/",               pos:"v",     m:"为…感到惋惜；哀叹",               ex:"She {lamented} the loss of that simpler era."},
+  {w:"assumption",    p:"/əˈsʌmpʃn/",              pos:"n",     m:"假设；想当然",                     ex:"That's a dangerous {assumption} to make."},
+  {w:"awareness",     p:"/əˈwɛrnɪs/",              pos:"n",     m:"意识；觉察",                       ex:"Self-{awareness} is the first step to growth."},
+  {w:"bias",          p:"/ˈbaɪəs/",                pos:"n",     m:"偏见；偏向",                       ex:"Everyone has some form of unconscious {bias}."},
+  {w:"clarity",       p:"/ˈklærɪti/",              pos:"n",     m:"清晰；明确",                       ex:"She needs more {clarity} before she can decide."},
+  {w:"consensus",     p:"/kənˈsɛnsəs/",            pos:"n",     m:"共识",                             ex:"The team reached a {consensus} after a long debate."},
+  {w:"credibility",   p:"/ˌkrɛdɪˈbɪlɪti/",         pos:"n",     m:"可信度；信誉",                     ex:"Lying once can destroy your {credibility}."},
+  {w:"facade",        p:"/fəˈsɑːd/",               pos:"n",     m:"表面；伪装",                       ex:"Behind the confident {facade} was pure anxiety."},
+  {w:"flaw",          p:"/flɔː/",                  pos:"n",     m:"缺陷；瑕疵",                       ex:"Every plan has its {flaws}."},
+  {w:"frustration",   p:"/frʌˈstreɪʃn/",           pos:"n",     m:"挫败感；沮丧",                     ex:"The {frustration} in her voice was obvious."},
+  {w:"implication",   p:"/ˌɪmplɪˈkeɪʃn/",          pos:"n",     m:"含义；潜在影响",                   ex:"Consider the {implications} before you act."},
+  {w:"incentive",     p:"/ɪnˈsɛntɪv/",             pos:"n",     m:"动力；激励",                       ex:"There's no {incentive} to work harder here."},
+  {w:"instinct",      p:"/ˈɪnstɪŋkt/",             pos:"n",     m:"本能；直觉",                       ex:"Trust your {instincts} on this one."},
+  {w:"leverage",      p:"/ˈlɛvərɪdʒ/",             pos:"n",     m:"影响力；筹码",                     ex:"She used her connections as {leverage}."},
+  {w:"motive",        p:"/ˈmoʊtɪv/",               pos:"n",     m:"动机",                             ex:"What's his {motive} for helping?"},
+  {w:"obligation",    p:"/ˌɑːblɪˈɡeɪʃn/",          pos:"n",     m:"义务；责任",                       ex:"You're under no {obligation} to agree."},
+  {w:"outcome",       p:"/ˈaʊtkʌm/",               pos:"n",     m:"结果；成效",                       ex:"The {outcome} was better than expected."},
+  {w:"precedent",     p:"/ˈprɛsɪdənt/",            pos:"n",     m:"先例；前例",                       ex:"This decision sets a dangerous {precedent}."},
+  {w:"rationale",     p:"/ˌræʃəˈnæl/",             pos:"n",     m:"理由；依据",                       ex:"Explain the {rationale} behind your decision."},
+  {w:"reputation",    p:"/ˌrɛpjʊˈteɪʃn/",          pos:"n",     m:"名誉；声誉",                       ex:"Once your {reputation} is damaged, it's hard to rebuild."},
+  {w:"setback",       p:"/ˈsɛtbæk/",               pos:"n",     m:"挫折；倒退",                       ex:"Every {setback} is a setup for a comeback."},
+  {w:"tendency",      p:"/ˈtɛndənsi/",             pos:"n",     m:"倾向；趋势",                       ex:"He has a {tendency} to overthink things."},
+  {w:"threshold",     p:"/ˈθrɛʃhoʊld/",            pos:"n",     m:"门槛；临界点",                     ex:"You've reached the {threshold} of what I can accept."},
+  {w:"ambiguity",     p:"/ˌæmbɪˈɡjuːɪti/",         pos:"n",     m:"模糊性；歧义",                     ex:"{Ambiguity} in instructions always leads to mistakes."},
+  {w:"hypocrisy",     p:"/hɪˈpɑːkrɪsi/",           pos:"n",     m:"虚伪；言行不一",                   ex:"The {hypocrisy} of his position was obvious to everyone."},
+  {w:"initiative",    p:"/ɪˈnɪʃətɪv/",             pos:"n",     m:"主动性；积极性",                   ex:"Take the {initiative} instead of waiting to be told."},
+  {w:"vulnerability", p:"/ˌvʌlnərəˈbɪlɪti/",       pos:"n",     m:"脆弱性；容易受伤",                 ex:"Showing {vulnerability} takes real courage."},
+  {w:"dedication",    p:"/ˌdɛdɪˈkeɪʃn/",           pos:"n",     m:"专注；奉献",                       ex:"Her {dedication} to the project was admirable."},
+  {w:"skepticism",    p:"/ˈskɛptɪˌsɪzm/",          pos:"n",     m:"怀疑态度；质疑精神",               ex:"Healthy {skepticism} is a valuable trait in science."},
 ];
 
 /* ──────── config ──────── */
@@ -537,17 +629,54 @@ function placeWord(w, h){
   };
 }
 
+/* ──────── progress tracking ──────── */
+function getProgress(){ try{ return JSON.parse(localStorage.getItem('ww_progress')||'{}'); }catch(e){ return {}; } }
+function saveProgress(p){ localStorage.setItem('ww_progress', JSON.stringify(p)); }
+
+let wallRecorded = false;
+
+function recordWallResults(){
+  if(!chips.length || wallRecorded) return;
+  const p = getProgress();
+  chips.forEach(({d, el})=>{
+    const popped = el.style.visibility === 'hidden';
+    const prev = p[d.w] || {state:'new', pops:0, skips:0};
+    if(popped){
+      p[d.w] = {...prev, state:'known', pops: prev.pops+1};
+    } else if(prev.state !== 'known'){
+      p[d.w] = {...prev, state:'review', skips: prev.skips+1};
+    }
+    // known words left unpopped stay known — no regression
+  });
+  saveProgress(p);
+  wallRecorded = true;
+}
+
 /* ──────── build wall ──────── */
 function buildWall(){
+  recordWallResults(); // commit previous wall before clearing
+  wallRecorded = false;
+
   const wall = document.getElementById('wall');
   wall.innerHTML = '';
   boxes=[]; chips=[]; cleared=0;
   activeChip=null; activeData=null;
   closePopup();
 
-  const pool  = customWords && customWords.length ? customWords : WORDS;
-  const wallN = Math.min(WALL_SIZE, pool.length);
-  const sel   = shuffle(pool).slice(0, wallN);
+  /* smart word selection */
+  const pool    = customWords && customWords.length ? customWords : WORDS;
+  const prog    = getProgress();
+  const review  = shuffle(pool.filter(d => prog[d.w]?.state === 'review'));
+  const fresh   = shuffle(pool.filter(d => !prog[d.w] || prog[d.w].state === 'new'));
+  const known   = shuffle(pool.filter(d => prog[d.w]?.state === 'known'));
+
+  const rn = Math.min(review.length, 14);          // up to 14 review words
+  const fn = Math.min(fresh.length, WALL_SIZE - rn); // fill rest with new
+  const kn = Math.min(known.length, WALL_SIZE - rn - fn); // top up with known
+
+  const sel = [...review.slice(0,rn), ...fresh.slice(0,fn), ...known.slice(0,kn)];
+  const wallN = sel.length;
+  const reviewSet = new Set(review.slice(0, rn).map(d => d.w));
   const sizes = sizeList(wallN);
 
   /* sort largest first for better packing */
@@ -566,7 +695,7 @@ function buildWall(){
     const opacity = sz<=13 ? .55 : sz<=17 ? .75 : 1;
 
     const el = document.createElement('span');
-    el.className = 'chip';
+    el.className = reviewSet.has(d.w) ? 'chip rv' : 'chip';
     el.textContent = d.w;
     el.style.cssText = `
       left:${pos.x}px; top:${pos.y}px;
@@ -723,7 +852,13 @@ function updateHUD(){
 
 /* ──────── done screen ──────── */
 function showDone(){
-  document.getElementById('done-p').textContent = `本轮 ${chips.length} 个词全部搞定`;
+  recordWallResults();
+  const pool = customWords && customWords.length ? customWords : WORDS;
+  const p = getProgress();
+  const nReview = pool.filter(d => p[d.w]?.state === 'review').length;
+  const nKnown  = pool.filter(d => p[d.w]?.state === 'known').length;
+  document.getElementById('done-p').textContent =
+    `本轮全清 · 已掌握 ${nKnown} · 待复习 ${nReview} · 词库 ${pool.length} 词`;
   document.getElementById('done').classList.add('show');
 }
 
@@ -744,6 +879,9 @@ document.getElementById('btn-speak').addEventListener('click', e=>{ e.stopPropag
 document.getElementById('next-btn').addEventListener('click', ()=>{
   document.getElementById('done').classList.remove('show');
   buildWall();
+});
+document.getElementById('next-wall-btn').addEventListener('click', e=>{
+  e.stopPropagation(); buildWall();
 });
 
 /* ──────── import ──────── */
