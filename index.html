@@ -200,24 +200,25 @@ body{
 
 /* next-wall button */
 #next-wall-btn{
-  font-size:11px;color:#252540;
-  background:none;border:1px solid #1a1a2e;
-  border-radius:6px;padding:5px 10px;
+  font-size:13px;color:#7070a8;
+  background:none;border:1px solid #30305a;
+  border-radius:6px;padding:5px 12px;
   cursor:pointer;white-space:nowrap;
   pointer-events:all;flex-shrink:0;
-  transition:color .15s,border-color .15s;
+  transition:color .15s,border-color .15s,background .15s;
 }
-#next-wall-btn:hover{color:#555;border-color:#2e2e50}
+#next-wall-btn:hover{color:#aaaadd;border-color:#5555aa;background:rgba(100,100,200,.08)}
 
 #import-btn{
-  font-size:11px;color:#252540;
-  background:none;border:1px solid #1a1a2e;
-  border-radius:6px;padding:5px 10px;
+  font-size:13px;color:#7070a8;
+  background:none;border:1px solid #30305a;
+  border-radius:6px;padding:5px 12px;
   cursor:pointer;white-space:nowrap;
   pointer-events:all;flex-shrink:0;
-  transition:color .15s,border-color .15s;
+  transition:color .15s,border-color .15s,background .15s;
 }
-#import-btn:hover{color:#555;border-color:#2e2e50}
+#import-btn:hover{color:#aaaadd;border-color:#5555aa;background:rgba(100,100,200,.08)}
+#import-btn.has-custom{color:#a78bfa;border-color:#6d28d9}
 #import-btn.has-custom{color:#7c3aed;border-color:#3d1f8a}
 
 /* ── import modal ── */
@@ -808,10 +809,35 @@ function closePopup(){
   document.getElementById('popup').classList.remove('show');
 }
 
+function playPop(){
+  try{
+    const ctx = new(window.AudioContext||window.webkitAudioContext)();
+    const now = ctx.currentTime;
+    /* tonal drop */
+    const osc = ctx.createOscillator(), og = ctx.createGain();
+    osc.connect(og); og.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(540, now);
+    osc.frequency.exponentialRampToValueAtTime(75, now+0.11);
+    og.gain.setValueAtTime(0.2, now);
+    og.gain.exponentialRampToValueAtTime(0.0001, now+0.13);
+    osc.start(now); osc.stop(now+0.13);
+    /* noise burst for crispness */
+    const nb = ctx.createBuffer(1, (ctx.sampleRate*0.018)|0, ctx.sampleRate);
+    const nd = nb.getChannelData(0);
+    for(let i=0;i<nd.length;i++) nd[i]=(Math.random()*2-1)*(1-i/nd.length);
+    const ns = ctx.createBufferSource(), ng = ctx.createGain();
+    ns.buffer=nb; ns.connect(ng); ng.connect(ctx.destination);
+    ng.gain.value=0.15; ns.start(now);
+    setTimeout(()=>ctx.close(), 300);
+  }catch(e){}
+}
+
 function popActive(){
   if(!activeChip) return;
   const el = activeChip;
   closePopup();
+  playPop();
   burst(el);
   el.classList.add('popping');
   setTimeout(()=>{
@@ -829,10 +855,10 @@ function burst(el){
   const cx = r.left + r.width/2;
   const cy = r.top  + r.height/2;
   const c  = el.style.getPropertyValue('--c') || '#fff';
-  for(let i=0;i<11;i++){
-    const a  = (i/11)*Math.PI*2;
-    const d  = 36+Math.random()*46;
-    const sz = 3+Math.random()*5;
+  for(let i=0;i<18;i++){
+    const a  = (i/18)*Math.PI*2 + Math.random()*0.3;
+    const d  = 30+Math.random()*60;
+    const sz = 2+Math.random()*7;
     const p  = document.createElement('div');
     p.className='pt';
     p.style.cssText=`left:${cx}px;top:${cy}px;width:${sz}px;height:${sz}px;
